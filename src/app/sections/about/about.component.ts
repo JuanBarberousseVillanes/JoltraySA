@@ -6,9 +6,11 @@ import { Component } from '@angular/core';
   template: `
     <div class="wrap section">
       <h2>Quiénes somos</h2>
-      <p>
-        Joltray s.a. está integrada por profesionales en comercio y finanzas, con soporte de técnicos especializados por área
-        (incluyendo conocimiento aduanero). Así garantizamos mejores prácticas y resultados en cada operación.
+      <p>Somos un equipo conformado por profesionales en comercio y finanzas,
+        respaldado por técnicos especializados que acompañan cada etapa de la operación.
+        Contamos con el soporte en cada área en la que operamos, incluyendo expertos con conocimiento aduanero y perfiles técnicos adecuados a
+        cada producto y servicio. Esta combinación de experiencia y supervisión técnica nos permite aplicar
+        las mejores prácticas, reducir riesgos y asegurar resultados medibles en cada operación.
       </p>
 
       <div class="cards">

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <footer>
       <div class="wrap">
-        <div>© {{year}} Joltray s.a. Todos los derechos reservados.</div>
+        <div>© {{year}} Joltray S.A. Todos los derechos reservados.</div>
         <div class="links">
           <a href="#sobre">Nosotros</a>
           <a href="#servicios">Servicios</a>
