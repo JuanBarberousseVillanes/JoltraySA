@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
     </section>
   `,
   styles: [`
-    .hero { position:relative; min-height: 78vh; display:grid; place-items:center; background: url('../../../assets/Transporte.png') center/cover no-repeat; color:#fff; }
+    .hero { position:relative; min-height: 78vh; display:grid; place-items:center; background: url('/assets/Transporte.png') center/cover no-repeat; color:#fff; }
     .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55)); }
     .content { position:relative; text-align:center; padding: 0 1rem; }
     h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight:800; line-height:1.1; }
