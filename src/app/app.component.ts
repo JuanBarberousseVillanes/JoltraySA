@@ -18,12 +18,7 @@ import { ContactComponent } from './sections/contact/contact.component';
       <section id="sobre"><app-about></app-about></section>
       <section id="servicios"><app-services></app-services></section>
       <section id="contacto">
-        <app-contact
-          [emails]="emails"
-          phone="+59898347496"
-          [display]="'+598 98 347 496'"
-          wppMessage="¡Hola! Vengo desde la web de Joltray s.a. y me gustaría más información.">
-        </app-contact>
+        <app-contact></app-contact>
       </section>
     </main>
 
