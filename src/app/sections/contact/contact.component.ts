@@ -21,7 +21,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
         <div class="layout">
           <!-- Panel de información (teléfono y correo) -->
-          <aside class="info-panel">
+          <aside class="info-panel" aria-label="Datos de contacto">
             <div class="block">
               <h3>Teléfono</h3>
               <a class="info" href="tel:REEMPLAZAR_NUMERO_PRINCIPAL">
@@ -39,7 +39,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
             <div class="quick">
               <a class="btn whatsapp"
                  [href]="waHref()"
-                 target="_blank" rel="noopener">
+                 target="_blank" rel="noopener"
+                 aria-label="Contactar por WhatsApp">
                 WhatsApp
               </a>
             </div>
@@ -47,10 +48,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
           <!-- Card formulario -->
           <div class="card form-card">
-            <form [formGroup]="frm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="frm" (ngSubmit)="onSubmit()" novalidate>
               <label class="field">
                 <span>Email</span>
-                <input type="email" formControlName="email" placeholder="tuemail@ejemplo.com" />
+                <input type="email" formControlName="email" placeholder="tuemail@ejemplo.com" autocomplete="email" />
                 <small class="err" *ngIf="submitted() && frm.controls.email.invalid">
                   Ingresá un email válido.
                 </small>
@@ -82,34 +83,59 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     </section>
   `,
   styles: [`
-    .section{ padding:64px 16px; background:#fafafa; }
-    .wrap{ max-width:1100px; margin:0 auto; }
-    h2{ font-size:clamp(1.6rem,3.5vw,2.2rem); margin:0 0 .25rem; }
-    .subtitle{ margin:0 0 1.5rem; color:#667085; }
+    /* Se apoya en variables globales si las definiste (styles.css).
+       Igual dejamos valores por defecto para no romper nada. */
+    :host{ --wrap-max: 1200px; --radius: 16px; --shadow-1: 0 4px 16px rgba(0,0,0,.05); }
 
-    .card{ background:#fff; border:1px solid #eee; border-radius:16px; padding:1.25rem; box-shadow:0 4px 16px rgba(0,0,0,.04); }
-    .intro-copy{ margin-bottom:1.25rem; }
+    .section{ padding: clamp(48px, 6vw, 80px) 16px; background:#fafafa; }
+    .wrap{ max-width: var(--wrap-max); margin:0 auto; }
+    h2{ font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin:0 0 .25rem; }
+    .subtitle{ margin:0 0 clamp(12px, 2vw, 20px); color:#667085; }
 
-    .layout{ display:grid; grid-template-columns: 1fr; gap:1.25rem; }
+    .card{
+      background:#fff; border:1px solid #eee; border-radius:var(--radius);
+      padding: clamp(14px, 2.3vw, 20px); box-shadow: var(--shadow-1);
+    }
+    .intro-copy{ margin-bottom: clamp(12px, 2vw, 20px); }
+
+    /* Grilla fluida: en desktop 2 columnas, en mobile stack */
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: clamp(12px, 2vw, 20px);
+    }
     @media (min-width: 960px){
-      .layout{ grid-template-columns: 380px 1fr; }
+      .layout{ grid-template-columns: minmax(260px, 380px) 1fr; }
     }
 
+    /* Panel de info: mantenemos tus colores actuales */
     .info-panel{
       background:#0F2451; color:#fff;
-      border-radius:16px; padding:1.25rem 1rem;
+      border-radius:var(--radius);
+      padding: clamp(14px, 2.3vw, 20px);
       box-shadow:0 6px 20px rgba(0,0,0,.12);
     }
-    .info-panel .block{ margin-bottom:1rem; }
-    .info-panel h3, .info-panel h4{ margin:.1rem 0 .35rem; font-weight:700; }
-    .info-panel h3{ font-size:1.05rem; }
-    .info-panel h4{ font-size:.95rem; opacity:.95; }
-    .info-panel .info{ color:#E6F0FF; text-decoration:none; display:inline-block; line-height:1.35; }
+    .info-panel .block{ margin-bottom: .9rem; }
+    .info-panel h3, .info-panel h4{
+      margin:.1rem 0 .35rem; font-weight:700;
+      font-size: clamp(1rem, 2.2vw, 1.05rem);
+    }
+    .info-panel h4{ opacity:.95; }
+    .info-panel .info{
+      color:#E6F0FF;
+      text-decoration:none;
+      display:inline-block;
+      line-height:1.35;
+      word-break: break-word;
+    }
     .info-panel .info:hover{ text-decoration:underline; }
 
-    .quick{ display:flex; gap:.5rem; margin-top:.75rem; }
-    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-      padding:.7rem 1rem; border-radius:12px; border:1px solid transparent; cursor:pointer; text-decoration:none; }
+    .quick{ display:flex; gap:.5rem; margin-top:.75rem; flex-wrap:wrap; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding: .7rem 1rem; border-radius:12px; border:1px solid transparent;
+      cursor:pointer; text-decoration:none; min-height:44px;
+    }
     .btn.whatsapp{ background:#25D366; color:#0b1512; font-weight:600; }
     .btn.primary{ background:#111827; color:#fff; }
     .btn[disabled]{ opacity:.7; cursor:not-allowed; }
@@ -117,15 +143,20 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .form-card .field{ display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
     .form-card .field span{ font-weight:600; color:#111827; }
     input, textarea{
-      width:100%; padding:.8rem 1rem; border-radius:12px; border:1px solid #e5e7eb; background:#f9fafb;
-      outline:none; transition:border-color .2s ease, background .2s ease; font: inherit;
+      width:100%;
+      padding: clamp(12px, 2vw, 14px) clamp(14px, 2vw, 16px);
+      border-radius:12px; border:1px solid #e5e7eb; background:#f9fafb;
+      outline:none; transition:border-color .2s ease, background .2s ease;
+      font: inherit;
     }
     input:focus, textarea:focus{ border-color:#94a3b8; background:#fff; }
-    .actions{ display:flex; align-items:center; gap:.75rem; margin-top:.25rem; flex-wrap:wrap; }
+    .actions{
+      display:flex; align-items:center; gap:.75rem; margin-top:.25rem; flex-wrap:wrap;
+    }
     .ok{ color:#059669; }
     .err{ color:#dc2626; }
 
-    .helper{ color:#98A2B3; font-size:.85rem; margin-top:.75rem; }
+    .helper{ color:#98A2B3; font-size:.9rem; margin-top:.75rem; }
   `]
 })
 export class ContactComponent implements OnDestroy {
@@ -133,7 +164,7 @@ export class ContactComponent implements OnDestroy {
 
   // ========= Configurable =========
   readonly WHATSAPP_NUMBER = '59898347496';        // formato internacional sin + ni espacios
-  readonly DEST_EMAIL = 'jbvcontacto@gmail.com';   // destino mailto (cambiar cuando uses API)
+  readonly DEST_EMAIL = 'jbvcontacto@gmail.com';   // destino mailto (cambiar cuando uses API/servicio)
 
   frm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -150,7 +181,7 @@ export class ContactComponent implements OnDestroy {
 
   waHref() {
     const base = 'https://wa.me/';
-    const text = `Hola, estoy interesado/a en obtener más información. Mi email es: ${this.frm.value.email ?? ''}`;
+    const text = `Hola, estoy interesado/a en obtener más información sobre tus servicios.`;
     return `${base}${this.WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
   }
 
@@ -158,24 +189,23 @@ export class ContactComponent implements OnDestroy {
     this.submitted.set(true);
     this.status.set('idle');
 
-    // Si es inválido, muestra validaciones y las oculta solas
     if (this.frm.invalid) {
       clearTimeout(this.submittedTimer);
-      this.submittedTimer = setTimeout(() => this.submitted.set(false), 3500); // 3.5 s
+      this.submittedTimer = setTimeout(() => this.submitted.set(false), 3500);
       return;
     }
 
     this.loading.set(true);
     try {
-      // ==== Envío provisional por mailto (hasta tener API) ====
+      // Envío provisional por mailto (hasta tener API/servicio)
       const subject = 'Contacto web';
       const body = `Email: ${this.frm.value.email}\n\nMensaje:\n${this.frm.value.message}`;
-      window.location.href = `mailto:${this.DEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href =
+        `mailto:${this.DEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-      // Mostrar éxito y auto-ocultar
       this.status.set('ok');
       clearTimeout(this.statusTimer);
-      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000); // 4 s
+      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000);
 
       this.frm.reset();
       this.submitted.set(false);
@@ -183,7 +213,7 @@ export class ContactComponent implements OnDestroy {
       console.error(e);
       this.status.set('err');
       clearTimeout(this.statusTimer);
-      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000); // 4 s
+      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000);
     } finally {
       this.loading.set(false);
     }
