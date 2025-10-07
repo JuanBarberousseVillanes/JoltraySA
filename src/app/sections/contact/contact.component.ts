@@ -181,8 +181,7 @@ export class ContactComponent implements OnDestroy {
 
   waHref() {
     const base = 'https://wa.me/';
-    const text = `Hola, estoy interesado/a en obtener más información sobre tus servicios.`;
-    return `${base}${this.WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    return `${base}${this.WHATSAPP_NUMBER}`;
   }
 
   async onSubmit() {
