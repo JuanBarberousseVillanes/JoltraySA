@@ -116,7 +116,7 @@ export class ServicesComponent {
       ]},
     { title: 'Maquinarias', points: [
         'Equipos confiables y soporte post-venta.',
-        'Foco en papelera, corrugado, plástica y empaques en general.'
+        'Foco en el mercado papelero, corrugado, plástico y de empaques en general.'
       ]}
   ];
 }

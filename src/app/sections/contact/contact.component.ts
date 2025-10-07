@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -10,7 +10,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     <section class="contact section">
       <div class="wrap">
         <h2>Contacto</h2>
-        <p class="subtitle">Escribinos y te respondemos a la brevedad.</p>
+        <p class="subtitle">No dudes en contactarnos.</p>
 
         <!-- Intro institucional -->
         <div class="intro-copy card">
@@ -20,30 +20,17 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
         </div>
 
         <div class="layout">
-          <!-- Panel de información (teléfonos y correo) -->
+          <!-- Panel de información (teléfono y correo) -->
           <aside class="info-panel">
             <div class="block">
-              <h3>Teléfonos</h3>
-              <!-- Reemplazar el href tel: y los textos -->
+              <h3>Teléfono</h3>
               <a class="info" href="tel:REEMPLAZAR_NUMERO_PRINCIPAL">
-                (+598) 2708 9936 – 8 líneas colectivas
-                <!-- Ejemplo: (+598) 2708 9936 – 8 líneas colectivas -->
-              </a>
-            </div>
-
-            <div class="block">
-              <h4>Fuera del horario de oficina</h4>
-              <!-- Reemplazar el href tel: y los textos -->
-              <a class="info" href="tel:REEMPLAZAR_NUMERO_EMERGENCIA">
-                Teléfono de emergencias<br/>
-                (+598) 96 365 304
-                <!-- Ejemplo: (+598) 96 365 304 -->
+                +598 98 347 496
               </a>
             </div>
 
             <div class="block">
               <h3>Correo electrónico</h3>
-              <!-- Reemplazar el mailto: y el texto -->
               <a class="info" href="mailto:REEMPLAZAR_EMAIL_DESTINO"
                  [innerText]="'contacto@joltray.com.uy'">
               </a>
@@ -55,7 +42,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
                  target="_blank" rel="noopener">
                 WhatsApp
               </a>
-              <!-- Configurar el número en WHATSAPP_NUMBER más abajo -->
             </div>
           </aside>
 
@@ -74,7 +60,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
                 <span>Motivo / Consulta</span>
                 <textarea formControlName="message" rows="8" placeholder="Contanos cómo podemos ayudarte"></textarea>
                 <small class="err" *ngIf="submitted() && frm.controls.message.invalid">
-                  Escribí al menos 10 caracteres.
+                  Introduzca un mensaje de al menos 10 caracteres explicando el motivo de consulta.
                 </small>
               </label>
 
@@ -82,7 +68,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
                 <button class="btn primary" type="submit" [disabled]="loading()">
                   {{ loading() ? 'Enviando…' : 'Enviar' }}
                 </button>
-                <span *ngIf="status() === 'ok'" class="ok">¡Mensaje enviado! Te estaremos contactando.</span>
+                <span *ngIf="status() === 'ok'" class="ok">¡Mensaje enviado! Te contactaremos a la brevedad.</span>
                 <span *ngIf="status() === 'err'" class="err">Ocurrió un error. Probá de nuevo en unos minutos.</span>
               </div>
             </form>
@@ -90,7 +76,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
         </div>
 
         <p class="helper">
-          *Completá los campos con tu direccion de correo electronico y motivo de consulta. Nos podremos en contacto lo antes posiblers de <strong>teléfono</strong>, <strong>emergencias</strong>, <strong>correo</strong> y <strong>WhatsApp</strong>.
+          *Completá los campos con tu dirección de correo electrónico y motivo de consulta. Nos pondremos en contacto lo antes posible.
         </p>
       </div>
     </section>
@@ -110,25 +96,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .info-panel{
-      background:#0F2451; /* azul profundo */
-      color:#fff;
-      border-radius:16px;
-      padding:1.25rem 1rem;
+      background:#0F2451; color:#fff;
+      border-radius:16px; padding:1.25rem 1rem;
       box-shadow:0 6px 20px rgba(0,0,0,.12);
     }
     .info-panel .block{ margin-bottom:1rem; }
-    .info-panel h3, .info-panel h4{
-      margin:.1rem 0 .35rem;
-      font-weight:700;
-    }
+    .info-panel h3, .info-panel h4{ margin:.1rem 0 .35rem; font-weight:700; }
     .info-panel h3{ font-size:1.05rem; }
     .info-panel h4{ font-size:.95rem; opacity:.95; }
-    .info-panel .info{
-      color:#E6F0FF;
-      text-decoration:none;
-      display:inline-block;
-      line-height:1.35;
-    }
+    .info-panel .info{ color:#E6F0FF; text-decoration:none; display:inline-block; line-height:1.35; }
     .info-panel .info:hover{ text-decoration:underline; }
 
     .quick{ display:flex; gap:.5rem; margin-top:.75rem; }
@@ -152,15 +128,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .helper{ color:#98A2B3; font-size:.85rem; margin-top:.75rem; }
   `]
 })
-export class ContactComponent {
+export class ContactComponent implements OnDestroy {
   private fb = inject(FormBuilder);
 
-  // ========= Completar luego =========
-  /* WhatsApp: número en formato internacional sin + ni espacios (ej.: 59891234567) */
-  readonly WHATSAPP_NUMBER = 'REEMPLAZAR_NUMERO_WA';
-
-  /* Email destino para recibir formularios (usado en API o fallback mailto) */
-  readonly DEST_EMAIL = 'REEMPLAZAR_EMAIL_DESTINO';
+  // ========= Configurable =========
+  readonly WHATSAPP_NUMBER = '59898347496';        // formato internacional sin + ni espacios
+  readonly DEST_EMAIL = 'jbvcontacto@gmail.com';   // destino mailto (cambiar cuando uses API)
 
   frm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -171,44 +144,53 @@ export class ContactComponent {
   status = signal<'idle'|'ok'|'err'>('idle');
   submitted = signal(false);
 
+  // timers para auto-ocultar mensajes
+  private statusTimer?: any;
+  private submittedTimer?: any;
+
   waHref() {
     const base = 'https://wa.me/';
-    const text = `Hola, quiero más información. Mi email es: ${this.frm.value.email ?? ''}`;
+    const text = `Hola, estoy interesado/a en obtener más información. Mi email es: ${this.frm.value.email ?? ''}`;
     return `${base}${this.WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
   }
 
   async onSubmit() {
     this.submitted.set(true);
     this.status.set('idle');
-    if (this.frm.invalid) return;
+
+    // Si es inválido, muestra validaciones y las oculta solas
+    if (this.frm.invalid) {
+      clearTimeout(this.submittedTimer);
+      this.submittedTimer = setTimeout(() => this.submitted.set(false), 3500); // 3.5 s
+      return;
+    }
 
     this.loading.set(true);
     try {
-      // ==== Opción A: tu API (recomendado) ====
-      // const res = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     to: this.DEST_EMAIL,
-      //     email: this.frm.value.email,
-      //     message: this.frm.value.message,
-      //   }),
-      // });
-      // if (!res.ok) throw new Error('HTTP ' + res.status);
-
-      // ==== Opción C: Fallback mailto (hasta configurar backend) ====
+      // ==== Envío provisional por mailto (hasta tener API) ====
       const subject = 'Contacto web';
       const body = `Email: ${this.frm.value.email}\n\nMensaje:\n${this.frm.value.message}`;
       window.location.href = `mailto:${this.DEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
+      // Mostrar éxito y auto-ocultar
       this.status.set('ok');
+      clearTimeout(this.statusTimer);
+      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000); // 4 s
+
       this.frm.reset();
       this.submitted.set(false);
     } catch (e) {
       console.error(e);
       this.status.set('err');
+      clearTimeout(this.statusTimer);
+      this.statusTimer = setTimeout(() => this.status.set('idle'), 4000); // 4 s
     } finally {
       this.loading.set(false);
     }
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.statusTimer);
+    clearTimeout(this.submittedTimer);
   }
 }
